@@ -1,0 +1,100 @@
+localhost:1521/xepdb1
+https://localhost:5500/em
+
+/ as sysdba
+
+
+
+connect sys/oracle@localhost:1521/xepdb1 as sysdba;
+
+create user demouser identified by demouser  default tablespace users quota unlimited on users;
+
+create user bip identified by admin;
+
+ grant all privileges to bip;
+
+
+connect bip/admin@localhost:1521/xepdb1 as sysdba;
+
+create table testtable(ename varchar(10),age number);
+insert into testtable values ('Ravi',18);
+commit;
+select * from testtable;
+
+Create Table COUNTRIES
+(
+COUNTRY_ID  NUMBER,
+COUNTRY_ISO_CODE  CHAR(2),
+COUNTRY_NAME VARCHAR2(40),
+COUNTRY_SUBREGION  VARCHAR2(30),
+COUNTRY_SUBREGION_ID  NUMBER,
+COUNTRY_REGION  VARCHAR2(20),
+COUNTRY_REGION_ID  NUMBER,
+COUNTRY_TOTAL  VARCHAR2(11),
+COUNTRY_TOTAL_ID  NUMBER,
+COUNTRY_NAME_HIST VARCHAR2(40)
+);
+
+
+Create Table CUSTOMERS
+(
+CUST_ID  NUMBER,
+CUST_FIRST_NAME  VARCHAR2(20),
+CUST_LAST_NAME  VARCHAR2(40),
+CUST_GENDER  CHAR(1),
+CUST_YEAR_OF_BIRTH  NUMBER(4),
+CUST_MARITAL_STATUS VARCHAR2(20),
+CUST_STREET_ADDRESS  VARCHAR2(40),
+CUST_POSTAL_CODE  VARCHAR2(10),
+CUST_CITY  VARCHAR2(30),
+CUST_CITY_ID  NUMBER,
+CUST_STATE_PROVINCE  VARCHAR2(40),
+CUST_STATE_PROVINCE_ID  NUMBER,
+COUNTRY_ID  NUMBER,
+CUST_MAIN_PHONE_NUMBER  VARCHAR2(25),
+CUST_INCOME_LEVEL VARCHAR2(30),
+CUST_CREDIT_LIMIT NUMBER,
+CUST_EMAIL VARCHAR2(30),
+CUST_TOTAL  VARCHAR2(14),
+CUST_TOTAL_ID  NUMBER,
+CUST_SRC_ID NUMBER,
+CUST_EFF_FROM DATE,
+CUST_EFF_TO DATE,
+CUST_VALID VARCHAR2(1)
+);
+
+
+
+CREATE DIMENSION customers_dim 
+   LEVEL customer   IS (customers.cust_id)
+   LEVEL city       IS (customers.cust_city) 
+   LEVEL state      IS (customers.cust_state_province) 
+   LEVEL country    IS (countries.country_id) 
+   LEVEL subregion  IS (countries.country_subregion) 
+   LEVEL region     IS (countries.country_region) 
+   HIERARCHY geog_rollup (
+      customer      CHILD OF
+      city          CHILD OF 
+      state         CHILD OF 
+      country       CHILD OF 
+      subregion     CHILD OF 
+      region 
+   JOIN KEY (customers.country_id) REFERENCES country
+   )
+   ATTRIBUTE customer DETERMINES
+   (cust_first_name, cust_last_name, cust_gender, 
+    cust_marital_status, cust_year_of_birth, 
+    cust_income_level, cust_credit_limit) 
+   ATTRIBUTE country DETERMINES (countries.country_name)
+;
+
+
+ALTER DIMENSION times_dim DROP ATTRIBUTE fis_year;
+ALTER DIMENSION times_dim DROP HIERARCHY fis_rollup;
+ALTER DIMENSION times_dim DROP LEVEL fis_year;
+ALTER DIMENSION times_dim ADD LEVEL f_year IS times.fiscal_year;
+
+DROP DIMENSION times_dim;
+
+@utldim.sql 
+EXECUTE DBMS_DIMENSION.VALIDATE_DIMENSION ('customers_dim', FALSE, TRUE, 'my first example');
