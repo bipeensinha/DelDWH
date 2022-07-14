@@ -1,0 +1,15 @@
+Analyzing data to forecast market trends and boost organisational performance is a crucial business activity in 
+today's competitive economy. Businesses have the problem of collecting and analysing massive amounts of data and 
+converting them into profits as they continue to use information technology (IT) for an increasing number of 
+operations. In response, the retail industry in particular is trying to revisit and upgrade its business strategies by 
+introducing Business Intelligence (BI) and Data Warehousing (DW). DW is becoming necessary nowadays for the retail sector in India and is widely accepted for state-of-the-art 
+decision support. 
+Reliance Trends is largest apparel chain in India with more than 12000 stores and 100+ brands. In order to make better decision 
+using the historical data available within the organization they were facing difficulty because they did'nt have 
+a centralized system for extracting data. In an attempt to address this shortcoming, several departments within the retail company 
+found their own resources, use different data available and hired consultants to solve their individual short-term
+ data needs. In many cases, the same data was extracted from the same source systems to be accessed by separate 
+departments without any strategic overall information-delivery strategy. The management realized the negative 
+effect the different sources of the data has on the reports presented by the managers as the lack of integration.
+A data warehouse is the foundation for powerful data analysis, it supports business decision by encouraging 
+manager and other users of the company to examine data and carry out analysis in a better way.
